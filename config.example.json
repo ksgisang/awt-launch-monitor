@@ -1,0 +1,23 @@
+{
+  "github": {
+    "token": "ghp_xxxx",
+    "repo": "ksgisang/AI-Watch-Tester"
+  },
+  "devto": {
+    "api_key": "xxxx"
+  },
+  "hashnode": {
+    "token": "xxxx",
+    "publication_host": "thestrangeloop.hashnode.dev"
+  },
+  "browser_sites": [
+    {"name": "Velog", "url": "https://velog.io/@ksgisang"},
+    {"name": "Disquiet", "url": ""},
+    {"name": "CoderLegion", "url": "https://coderlegion.com/ksgisang"},
+    {"name": "GeekNews", "url": ""}
+  ],
+  "telegram": {
+    "bot_token": "xxxx",
+    "chat_id": "xxxx"
+  }
+}

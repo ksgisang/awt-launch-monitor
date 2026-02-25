@@ -1,0 +1,63 @@
+name: AWT Launch Monitor
+
+on:
+  schedule:
+    # KST 09:00, 15:00, 21:00
+    - cron: "0 0,6,12 * * *"
+  workflow_dispatch:
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate config.json from secrets
+        run: |
+          cat > config.json << 'PYEOF'
+          PYEOF
+          python3 -c "
+          import json, os
+          config = {
+              'github': {
+                  'token': os.environ['GITHUB_TOKEN_AWT'],
+                  'repo': 'ksgisang/AI-Watch-Tester'
+              },
+              'devto': {
+                  'api_key': os.environ['DEVTO_API_KEY']
+              },
+              'hashnode': {
+                  'token': os.environ['HASHNODE_TOKEN'],
+                  'publication_host': 'thestrangeloop.hashnode.dev'
+              },
+              'browser_sites': [
+                  {'name': 'Velog', 'url': 'https://velog.io/@ksgisang'},
+                  {'name': 'Disquiet', 'url': ''},
+                  {'name': 'CoderLegion', 'url': 'https://coderlegion.com/ksgisang'},
+                  {'name': 'GeekNews', 'url': ''}
+              ],
+              'telegram': {
+                  'bot_token': os.environ['TELEGRAM_BOT_TOKEN'],
+                  'chat_id': os.environ['TELEGRAM_CHAT_ID']
+              }
+          }
+          with open('config.json', 'w') as f:
+              json.dump(config, f, indent=2)
+          "
+        env:
+          GITHUB_TOKEN_AWT: ${{ secrets.GITHUB_TOKEN_AWT }}
+          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+          HASHNODE_TOKEN: ${{ secrets.HASHNODE_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+
+      - name: Run monitor
+        run: python monitor.py --silent
