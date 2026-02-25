@@ -22,13 +22,11 @@ jobs:
 
       - name: Generate config.json from secrets
         run: |
-          cat > config.json << 'PYEOF'
-          PYEOF
           python3 -c "
           import json, os
           config = {
               'github': {
-                  'token': os.environ['GITHUB_TOKEN_AWT'],
+                  'token': os.environ['AWT_GITHUB_TOKEN'],
                   'repo': 'ksgisang/AI-Watch-Tester'
               },
               'devto': {
@@ -53,7 +51,7 @@ jobs:
               json.dump(config, f, indent=2)
           "
         env:
-          GITHUB_TOKEN_AWT: ${{ secrets.GITHUB_TOKEN_AWT }}
+          AWT_GITHUB_TOKEN: ${{ secrets.AWT_GITHUB_TOKEN }}
           DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
           HASHNODE_TOKEN: ${{ secrets.HASHNODE_TOKEN }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
